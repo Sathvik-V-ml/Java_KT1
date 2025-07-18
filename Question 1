@@ -1,0 +1,23 @@
+public class InvalidAgeException extends Exception {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
+}
+
+class VoterRegistration {
+    public static void registerVoter(String name, int age) throws InvalidAgeException {
+        if (age < 18) {
+            throw new InvalidAgeException("Age must be 18 or older to register for voting");
+        }
+        System.out.println(name + " is registered to vote!");
+    }
+
+    public static void main(String[] args) {
+        try {
+            registerVoter("Alice", 20); // Valid case
+            registerVoter("Bob", 16);   // Will throw exception
+        } catch (InvalidAgeException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
