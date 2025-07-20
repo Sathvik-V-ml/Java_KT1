@@ -1,0 +1,35 @@
+import java.util.*;
+
+class Student {
+    String name;
+    int marks;
+
+    Student(String name, int marks) {
+        this.name = name;
+        this.marks = marks;
+    }
+
+    public String toString() {
+        return name + " " + marks;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        List<Student> students = new ArrayList<>();
+
+        students.add(new Student("John", 70));
+        students.add(new Student("Alice", 90));
+        students.add(new Student("Bob", 80));
+
+        Collections.sort(students, new MarksComparator());
+
+        System.out.println(students);
+    }
+}
+
+class MarksComparator implements Comparator<Student> {
+    public int compare(Student s1, Student s2) {
+        return s1.marks - s2.marks; 
+    }
+}
