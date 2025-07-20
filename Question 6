@@ -1,0 +1,16 @@
+import java.util.*;
+
+public class RemoveDuplicates {
+
+    public static void main(String[] args) {
+        int[] numbers = {1, 2, 2, 3, 4, 4, 5};
+
+        HashSet<Integer> set = new HashSet<>();
+
+        for (int num : numbers) {
+            set.add(num);  
+        }
+
+        System.out.println(set);  
+    }
+}
