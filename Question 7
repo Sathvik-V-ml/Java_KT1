@@ -1,0 +1,36 @@
+class Box<T> {
+    private T item;
+
+    public void set(T item) {
+        this.item = item;
+    }
+
+    public T get() {
+        return item;
+    }
+}
+
+class Person {
+    String name;
+
+    Person(String name) {
+        this.name = name;
+    }
+
+    public String toString() {
+        return name;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        Box<Integer> intBox = new Box<>();
+        intBox.set(100);
+        System.out.println("Integer Box: " + intBox.get());
+
+        Box<String> strBox = new Box<>();
+        strBox.set("Hello");
+        System.out.println("String Box: " + strBox.get());
+    }
+}
