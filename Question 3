@@ -1,0 +1,26 @@
+import java.io.*;
+
+public class FileRead {
+
+    public static void readFile(String filename) {
+        try {
+            FileReader fr = new FileReader(filename);
+            System.out.println("File opened successfully.");
+
+            fr.close();
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found.");
+
+        } catch (IOException e) {
+            System.out.println("Error while closing the file.");
+
+        } catch (Exception e) {
+            System.out.println("Some other error occurred.");
+        }
+    }
+
+    public static void main(String[] args) {
+        readFile("test.txt"); 
+    }
+}
