@@ -1,0 +1,18 @@
+public class SwapSimple {
+
+    public static <T> void swap(T[] array, int i, int j) {
+        T temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        Integer[] arr = {10, 20, 30, 40};
+
+        swap(arr, 0, 2); 
+
+        for (Integer num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
