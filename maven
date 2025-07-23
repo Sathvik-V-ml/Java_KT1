@@ -16,26 +16,38 @@
 
 
 
+package com.example;
 
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC
-        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
-<hibernate-configuration>
-    <session-factory>
-        <!-- Database Connection Settings -->
-        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/hibernate_db?useSSL=false</property>
-        <property name="hibernate.connection.username">hibernate_user</property>
-        <property name="hibernate.connection.password">password</property>
-        <!-- MySQL Dialect -->
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
-        <!-- Schema Generation -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
-        <!-- Debugging -->
-        <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.format_sql">true</property>
-        <!-- Entity Classes -->
-        <mapping class="com.example.User"/>
-    </session-factory>
-</hibernate-configuration>
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "age")
+    private int age;
+
+    public User() {}
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public int getAge() { return age; }
+    public void setAge(int age) { this.age = age; }
+
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", name='" + name + "', age=" + age + "}";
+    }
+}
