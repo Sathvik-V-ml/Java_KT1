@@ -1,69 +1,60 @@
 package com.example;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import java.util.List;
 
-public class HibernateUtil {
-    private static final SessionFactory sessionFactory = buildSessionFactory();
-
-    private static SessionFactory buildSessionFactory() {
-        try {
-            return new Configuration()
-                    .configure("hibernate.cfg.xml")
-                    .addAnnotatedClass(User.class)
-                    .buildSessionFactory();
+public class Main {
+    public static void main(String[] args) {
+        // Create a user
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            User user = new User("Alice", 30);
+            session.persist(user);
+            tx.commit();
+            System.out.println("Created: " + user);
         } catch (Exception e) {
-            System.err.println("Error building SessionFactory: " + e.getMessage());
-            throw new ExceptionInInitializerError(e);
+            System.err.println("Error creating user: " + e.getMessage());
         }
-    }
 
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-
-    public static void shutdown() {
-        if (sessionFactory != null) {
-            sessionFactory.close();
+        // Query users
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM User WHERE age > :age";
+            List<User> users = session.createQuery(hql, User.class)
+                                     .setParameter("age", 25)
+                                     .getResultList();
+            System.out.println("Users older than 25: " + users);
+        } catch (Exception e) {
+            System.err.println("Error querying users: " + e.getMessage());
         }
-    }
-}
 
+        // Update user
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            User user = session.get(User.class, 1);
+            if (user != null) {
+                user.setAge(31);
+                session.merge(user);
+                tx.commit();
+                System.out.println("Updated: " + user);
+            }
+        } catch (Exception e) {
+            System.err.println("Error updating user: " + e.getMessage());
+        }
 
+        // Delete user
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            User user = session.get(User.class, 1);
+            if (user != null) {
+                session.remove(user);
+                tx.commit();
+                System.out.println("Deleted user");
+            }
+        } catch (Exception e) {
+            System.err.println("Error deleting user: " + e.getMessage());
+        }
 
-
-package com.example;
-
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "age")
-    private int age;
-
-    public User() {}
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
-
-    @Override
-    public String toString() {
-        return "User{id=" + id + ", name='" + name + "', age=" + age + "}";
+        HibernateUtil.shutdown();
     }
 }
