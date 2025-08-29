@@ -1,5 +1,24 @@
-CREATE DATABASE hibernate_db;
-CREATE USER 'hibernate_user'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON hibernate_db.* TO 'hibernate_user'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
+function Child({ name }) {
+  console.log("Child rendered");
+  return <div>Child: {name}</div>;
+}
+
+const MemoChild = React.memo(function MemoChild({ name }) {
+  console.log("MemoChild rendered");
+  return <div>MemoChild: {name}</div>;
+});
+
+export default function Parent() {
+  const [count, setCount] = useState(0);
+  const [dark, setDark] = useState(false);
+
+  return (
+    <div style={{ background: dark ? "#222" : "#fff", color: dark ? "#fff" : "#000" }}>
+      <button onClick={() => setCount(c => c + 1)}>Increment parent count ({count})</button>
+      <button onClick={() => setDark(d => !d)}>Toggle theme</button>
+      <hr />
+      <Child name="Alice" />
+      <MemoChild name="Alice" />
+    </div>
+  );
+}
